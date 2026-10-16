@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-label="codebuddy-claim data flow">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b1220"/>
+      <stop offset="100%" stop-color="#101b2d"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="420" fill="url(#bg)"/>
+
+  <text x="20" y="58" fill="#f3f6fb" font-size="24" font-weight="600" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif">How a claim moves through the tool</text>
+  <text x="20" y="88" fill="#7f93a8" font-size="14" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif">Accounts are handled one at a time, with a fixed delay between them.</text>
+
+  <g transform="translate(20, 130)">
+    <rect width="260" height="170" rx="14" fill="#0d1729" stroke="#24405e"/>
+    <rect width="260" height="4" rx="2" fill="#22d3ee" opacity="0.55"/>
+    <text x="22" y="40" fill="#f3f6fb" font-size="17" font-weight="600" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif">Credentials</text>
+    <line x1="22" y1="56" x2="238" y2="56" stroke="#1e3350"/>
+    <text x="22" y="84" fill="#a8bccf" font-size="13" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif">--data JSON file</text>
+    <text x="22" y="110" fill="#a8bccf" font-size="13" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif">Cockpit Tools store</text>
+    <text x="22" y="136" fill="#a8bccf" font-size="13" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif">AES-256-GCM encrypted</text>
+  </g>
+  <g transform="translate(320, 130)">
+    <rect width="260" height="170" rx="14" fill="#0d1729" stroke="#24405e"/>
+    <rect width="260" height="4" rx="2" fill="#22d3ee" opacity="0.55"/>
+    <text x="22" y="40" fill="#f3f6fb" font-size="17" font-weight="600" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif">Load accounts</text>
+    <line x1="22" y1="56" x2="238" y2="56" stroke="#1e3350"/>
+    <text x="22" y="84" fill="#a8bccf" font-size="13" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif">decrypt and normalize</text>
+    <text x="22" y="110" fill="#a8bccf" font-size="13" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif">numeric id and uid to text</text>
+    <text x="22" y="136" fill="#a8bccf" font-size="13" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif">dedupe, keep newest by iat</text>
+  </g>
+  <g transform="translate(620, 130)">
+    <rect width="260" height="170" rx="14" fill="#0d1729" stroke="#24405e"/>
+    <rect width="260" height="4" rx="2" fill="#22d3ee" opacity="0.55"/>
+    <text x="22" y="40" fill="#f3f6fb" font-size="17" font-weight="600" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif">Check and claim</text>
+    <line x1="22" y1="56" x2="238" y2="56" stroke="#1e3350"/>
+    <text x="22" y="84" fill="#22d3ee" font-size="12" font-family="Consolas, Menlo, Monaco, monospace">compensation-status</text>
+    <text x="22" y="110" fill="#22d3ee" font-size="12" font-family="Consolas, Menlo, Monaco, monospace">claim-compensation</text>
+    <text x="22" y="136" fill="#22d3ee" font-size="12" font-family="Consolas, Menlo, Monaco, monospace">check-gift-claimed</text>
+    <text x="22" y="162" fill="#22d3ee" font-size="12" font-family="Consolas, Menlo, Monaco, monospace">claim-gift</text>
+  </g>
+  <g transform="translate(920, 130)">
+    <rect width="260" height="170" rx="14" fill="#0d1729" stroke="#24405e"/>
+    <rect width="260" height="4" rx="2" fill="#22d3ee" opacity="0.55"/>
+    <text x="22" y="40" fill="#f3f6fb" font-size="17" font-weight="600" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif">History</text>
+    <line x1="22" y1="56" x2="238" y2="56" stroke="#1e3350"/>
+    <text x="22" y="84" fill="#a8bccf" font-size="13" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif">claim-history.jsonl</text>
+    <text x="22" y="110" fill="#a8bccf" font-size="13" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif">under the user data dir</text>
+    <text x="22" y="136" fill="#a8bccf" font-size="13" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif">rotates past 5 MiB</text>
+  </g>
+
+  <line x1="280" y1="215" x2="310" y2="215" stroke="#2f5a86" stroke-width="2"/>
+  <path d="M320 215 l-11 -6 l0 12 z" fill="#2f5a86"/>
+  <line x1="580" y1="215" x2="610" y2="215" stroke="#2f5a86" stroke-width="2"/>
+  <path d="M620 215 l-11 -6 l0 12 z" fill="#2f5a86"/>
+  <line x1="880" y1="215" x2="910" y2="215" stroke="#2f5a86" stroke-width="2"/>
+  <path d="M920 215 l-11 -6 l0 12 z" fill="#2f5a86"/>
+
+  <rect x="20" y="336" rx="10" width="1160" height="58" fill="#0d1729" stroke="#24405e"/>
+  <text x="40" y="360" fill="#7f93a8" font-size="13" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif">Every request below is a POST with a Bearer credential and the header X-Client-Platform: web.</text>
+  <text x="40" y="382" fill="#22d3ee" font-size="13" font-family="Consolas, Menlo, Monaco, monospace">paths are relative to /billing/meter/</text>
+</svg>

@@ -1,10 +1,55 @@
-# codebuddy-claim
+<div align="center">
 
-[English](README.md) | 简体中文
+<img src="./docs/assets/banner.svg" alt="codebuddy-claim" width="100%"/>
 
-一条命令批量领取 CodeBuddy 账号的积分福利（活动补偿、欢迎礼包）。单文件脚本，唯一第三方依赖 `cryptography`，HTTP 走标准库。对凭据来源只读，不写回。
+[![version](https://img.shields.io/badge/version-0.1.0-22d3ee)](./CHANGELOG.md)
+[![license](https://img.shields.io/badge/license-MIT-4f9cf9)](./LICENSE)
+[![python](https://img.shields.io/badge/python-3.9%2B-3776ab)](./pyproject.toml)
+[![platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-6f8299)](./README.zh-CN.md)
+[![dependency](https://img.shields.io/badge/dependency-cryptography-8b9bb0)](./requirements.txt)
 
-## 一、前置条件：准备一份凭据文件
+**一条命令，领取本机全部 CodeBuddy 账号的积分福利。**
+
+codebuddy-claim 遍历本机已有的 CodeBuddy 账号，把每个账号可领的活动补偿与欢迎礼包一次领完。
+凭据用手上已有的一份，导出文件或本地账号库都行，全程只读不写回。单个 Python 文件，一个依赖，
+不做浏览器自动化。
+
+[核心特性](#核心特性) · [快速开始](#快速开始) · [工作原理](#工作原理) · [常见问题](FAQ.md) · [贡献指南](CONTRIBUTING.md) · [更新日志](CHANGELOG.md)
+
+[English](README.md)
+
+</div>
+
+## 核心特性
+
+- **一次覆盖全部账号。** 一次运行处理凭据源里的所有账号，不需要逐个点击。
+- **两种凭据来源。** `--data` 指向导出的 JSON 文件，或让脚本解密 Cockpit Tools 的本地账号库。
+- **只读设计。** 导出文件与账号库都不会被写回。
+- **重复运行无副作用。** 领取前先向服务端确认状态，已领过的自动跳过，重跑是安全的。
+- **先干跑。** `claim --dry-run` 只报告会领到什么，不做任何领取动作。
+- **输出可用。** 每个账号一行状态，末尾一条汇总与失败计数，失败时退出码为 2，方便接脚本。
+- **留痕。** 每次运行追加到用户数据目录下可轮转的 `claim-history.jsonl`。
+- **直连。** 代理被有意关闭，流量不会悄悄经过中间人。
+
+## 快速开始
+
+### 1. 安装
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+```
+
+Windows 用 `.\.venv\Scripts\python.exe` 调用解释器，macOS/Linux 用 `.venv/bin/python`。
+
+也可以把项目装成包，装完多一个 `codebuddy-claim` 命令：
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install .
+codebuddy-claim list --data examples\sample-accounts.json
+```
+
+### 2. 准备凭据文件
 
 脚本不会调用任何账号管理工具的导入导出功能，它只读一份 JSON 凭据文件。无论你用什么工具管理账号，把数据整理成下面的格式即可，模板见 `docs/credentials-template.json`。
 
@@ -28,18 +73,11 @@
 
 带随机数值的完整样例见 `examples/sample-accounts.json`，可直接拿来试跑。
 
-如果你用的恰好是 Cockpit Tools：它的账号导出功能导出的就是这个格式，直接可用；本机装有它时也可以跳过导出，让脚本自动读取本地数据（见下文第二节）。
+如果你用的恰好是 Cockpit Tools：它的账号导出功能导出的就是这个格式，直接可用；本机装有它时也可以跳过导出，让脚本自动读取本地数据，见[工作原理](#工作原理)。
 
-## 二、怎么用
+### 3. 运行
 
-以下命令均在项目根目录下执行。先建虚拟环境并装依赖：
-
-```powershell
-python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r requirements.txt
-```
-
-Windows 用 `.\.venv\Scripts\python.exe` 调用解释器，macOS/Linux 用 `.venv/bin/python`。然后：
+以下命令均在项目根目录下执行：
 
 ```powershell
 .\.venv\Scripts\python.exe codebuddy_claim.py list             # 看有哪些账号、token 是否有效
@@ -47,14 +85,7 @@ Windows 用 `.\.venv\Scripts\python.exe` 调用解释器，macOS/Linux 用 `.ven
 .\.venv\Scripts\python.exe codebuddy_claim.py claim            # 正式领取
 ```
 
-也可以把项目装成包，装完多一个 `codebuddy-claim` 命令：
-
-```powershell
-.\.venv\Scripts\python.exe -m pip install .
-codebuddy-claim list --data examples\sample-accounts.json
-```
-
-日常只需要领取那条命令。有新活动时跑一次即可，已领过的账号自动跳过，重复跑没有副作用。
+日常只需要领取那条命令。有新活动时跑一次即可。
 
 凭据来源两种方式：
 
@@ -75,7 +106,7 @@ codebuddy-claim list --data examples\sample-accounts.json
 
 退出码：0 表示全部正常，2 表示存在失败条目，便于外部脚本判断。
 
-## 三、让 AI 操作
+## 让 AI 操作
 
 把下面整段复制发给 AI，在项目根目录下启动会话，替换尖括号内容即可：
 
@@ -89,7 +120,9 @@ codebuddy-claim list --data examples\sample-accounts.json
 
 说明：凭据文件路径填你自己的存放位置，相对或绝对均可；本机装有 Cockpit Tools 时可去掉 `--data`，脚本自动探测本机数据根。
 
-## 四、工作原理
+## 工作原理
+
+![数据流](./docs/assets/data-flow.svg)
 
 ### 接口
 
@@ -119,13 +152,18 @@ POST https://<domain>/billing/meter/claim-gift            # 领礼包
 - 凭据文件含登录态，不要提交到任何仓库或同步到公开位置
 - 领取历史写入系统用户数据目录下的 `codebuddy-claim/claim-history.jsonl`（Windows 在 %LOCALAPPDATA%，其他平台回退到用户主目录）
 
-## 五、已知限制
+## 技术栈
 
-- access_token 失效时脚本会用 refresh_token 尝试续期一次，实测官方对第三方刷新请求返回 401，因此失效账号仍需重新登录获取新凭据
-- access_token 的 JWT exp 只是签发声明，服务端吊销后 list 仍显示 VALID，401 才是真实判据
-- 接口端点来自前端 bundle 反查，官方改版可能导致端点变化，届时重新抓包更新
+| 层次 | 选型 | 说明 |
+| :-- | :-- | :-- |
+| 语言 | Python 3.9+ | 采用 `HTTPResponse.status`，因此最低 3.9 |
+| HTTP | 标准库 `urllib` | 不引入第三方 HTTP 客户端 |
+| 加密 | `cryptography` | AES-256-GCM，仅用于 Cockpit 存储 |
+| 打包 | `setuptools` + `pyproject.toml` | 提供 `codebuddy-claim` 命令 |
+| 本地规范 | `pre-commit` | 文本规范、语法检查、私钥检测 |
+| 许可证 | MIT | 见 [LICENSE](LICENSE) |
 
-## 六、文件结构
+## 项目结构
 
 ```
 codebuddy-claim/
@@ -146,8 +184,44 @@ codebuddy-claim/
 ├── .github/
 │   ├── ISSUE_TEMPLATE/           # 缺陷与需求模板
 │   └── pull_request_template.md  # PR 模板
+├── scripts/
+│   └── visualization/            # 上方图片的 SVG 生成脚本
 ├── examples/
 │   └── sample-accounts.json      # 凭据文件格式样例，值为随机数
-├── docs/                         # 分析与运行记录
+├── docs/
+│   ├── assets/                   # 横幅与流程图 SVG
+│   ├── PROJECT-ANALYSIS.md       # 代码审查与修复记录
+│   ├── RUNLOG.md                 # 本机运行记录，不属于对外文档
+│   └── credentials-template.json # 空白凭据模板
 └── data/                         # 凭据文件存放处（勿提交仓库）
 ```
+
+## 已知限制
+
+- access_token 失效时脚本会用 refresh_token 尝试续期一次，实测官方对第三方刷新请求返回 401，因此失效账号仍需重新登录获取新凭据
+- access_token 的 JWT exp 只是签发声明，服务端吊销后 list 仍显示 VALID，401 才是真实判据
+- 接口端点来自前端 bundle 反查，官方改版可能导致端点变化，届时重新抓包更新
+
+## 常见问题
+
+必填字段有哪些、为什么账号显示 INACTIVE、401 代表什么，这些问题在 [FAQ.md](FAQ.md) 里有解答。
+
+## 贡献指南
+
+欢迎提 issue 与 PR。动手前先读 [CONTRIBUTING.md](CONTRIBUTING.md)，里面写了报告里要带什么、本地检查命令，以及硬性约定，例如任何时候都不要贴 token。
+
+安全问题见 [SECURITY.md](SECURITY.md)，请走私密漏洞上报，不要开公开 issue。
+
+## 许可证
+
+采用 MIT 许可证，见 [LICENSE](LICENSE)。
+
+## 作者
+
+LPK3215 · [github.com/LPK3215](https://github.com/LPK3215) · <130586883+LPK3215@users.noreply.github.com>
+
+仓库地址：<https://github.com/LPK3215/codebuddy-claim>
+
+## 更新日志
+
+版本变更记录见 [CHANGELOG.md](CHANGELOG.md)。
