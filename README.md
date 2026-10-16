@@ -1,130 +1,143 @@
 # codebuddy-claim
 
-一条命令批量领取 CodeBuddy 账号的积分福利（活动补偿、欢迎礼包）。单文件脚本，唯一第三方依赖 `cryptography`，HTTP 走标准库。对凭据来源只读，不写回。
+[English](README.md) | [中文](README.zh-CN.md)
 
-## 一、前置条件：准备一份凭据文件
+Claim CodeBuddy account credits (activity compensation and welcome gift) for every account on the machine with a single command. Single-file script, one third-party dependency (`cryptography`), HTTP through the standard library. Every credential source is opened read-only.
 
-脚本不会调用任何账号管理工具的导入导出功能，它只读一份 JSON 凭据文件。无论你用什么工具管理账号，把数据整理成下面的格式即可，模板见 `docs/credentials-template.json`。
+## 1. Prerequisites: Prepare a Credentials File
 
-文件为 UTF-8 编码的 JSON 数组，每个元素一个账号。字段要求：
+The script never calls any account manager's import or export feature. It reads a single JSON credentials file. Whatever tool manages your accounts, getting the data into the shape below is enough. A template lives in `docs/credentials-template.json`.
 
-| 字段 | 必填 | 说明 |
+The file is a UTF-8 JSON array with one element per account. Field requirements:
+
+| Field | Required | Description |
 | :-- | :-- | :-- |
-| access_token | 是 | 登录态 JWT，请求以 Bearer 方式携带 |
-| domain | 是 | 账号所属站点域名，如 www.codebuddy.cn 或 www.codebuddy.ai |
-| id | 否 | 账号标识。用于去重与 `--account` 过滤，优先级最高 |
-| uid | 否 | 账号标识。id 缺失时用它去重与过滤 |
-| email | 否 | 显示名（手机号或邮箱），用于展示与过滤 |
-| expires_at | 否 | token 过期时间，毫秒时间戳。缺省时列表显示 UNKNOWN |
-| refresh_token | 否 | 刷新令牌。access_token 失效时脚本会用它尝试续期一次 |
-| status | 否 | 仅作展示 |
-| nickname | 否 | 脚本当前不读取，可留可删 |
+| access_token | yes | Login JWT, sent as a Bearer credential |
+| domain | yes | Site the account belongs to, either www.codebuddy.cn or www.codebuddy.ai |
+| id | no | Account identifier. Used for deduplication and `--account` filtering, highest priority |
+| uid | no | Account identifier. Used for deduplication and filtering when `id` is absent |
+| email | no | Display name (phone number or email), used for display and filtering |
+| expires_at | no | Token expiry as a millisecond timestamp. Missing means the list shows UNKNOWN |
+| refresh_token | no | Refresh token, tried once when access_token stops working |
+| status | no | Display only |
+| nickname | no | Not read by the script, keep it or drop it |
 
-只有 access_token 与 domain 是硬性必需。缺任一个或值为空串，该账号被静默跳过，输出里不会出现，也不影响其他账号。数字类型的 id 与 uid 会自动转成字符串，多余字段一律忽略。
+Only `access_token` and `domain` are mandatory. If either is missing or an empty string, that account is skipped silently: it does not appear in the output and does not affect the others. Numeric `id` and `uid` values are converted to strings. Any extra field is ignored.
 
-如果导出源里没有 domain 字段，手动补一个即可。取值只有 www.codebuddy.cn 与 www.codebuddy.ai 两种，按账号实际所属站点选。
+If the export source has no `domain` field, add one by hand. There are only two possible values, pick the site the account actually belongs to.
 
-带随机数值的完整样例见 `examples/sample-accounts.json`，可直接拿来试跑。
+A complete sample with randomized values lives in `examples/sample-accounts.json` and runs as is.
 
-如果你用的恰好是 Cockpit Tools：它的账号导出功能导出的就是这个格式，直接可用；本机装有它时也可以跳过导出，让脚本自动读取本地数据（见下文第二节）。
+If you happen to use Cockpit Tools, its account export already matches this format and works directly. When it is installed locally you can also skip exporting and let the script read the local data itself, see section 2.
 
-## 二、怎么用
+## 2. Usage
 
-以下命令均在项目根目录下执行。Windows 用 `.\.venv\Scripts\python.exe`，macOS/Linux 用 `.venv/bin/python`：
+Every command runs from the project root. On Windows use `.\.venv\Scripts\python.exe`, on macOS and Linux use `.venv/bin/python`:
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 
-.\.venv\Scripts\python.exe codebuddy_claim.py list             # 看有哪些账号、token 是否有效
-.\.venv\Scripts\python.exe codebuddy_claim.py claim --dry-run  # 只查谁可以领，不领取
-.\.venv\Scripts\python.exe codebuddy_claim.py claim            # 正式领取
+.\.venv\Scripts\python.exe codebuddy_claim.py list             # list accounts and token validity
+.\.venv\Scripts\python.exe codebuddy_claim.py claim --dry-run  # report what is claimable, claim nothing
+.\.venv\Scripts\python.exe codebuddy_claim.py claim            # claim for real
 ```
 
-日常只需要最后一条。有新活动时跑一次即可，已领过的账号自动跳过，重复跑没有副作用。
+Day to day only the last command matters. Run it once whenever a new campaign shows up. Accounts already claimed are skipped automatically, so running it twice has no side effect.
 
-凭据来源两种方式：
+Two credential sources:
 
-1. `--data <文件路径>` 指定凭据文件，通用方式，推荐。
-2. 本机装有 Cockpit Tools 时可不导出，脚本自动解密其本地账号库：默认探测用户主目录下的 `.cockpit_tools` 与 `.antigravity_cockpit`，可用环境变量 `COCKPIT_TOOLS_HOME` 指定其他位置。
+1. `--data <path>` points at a credentials file. General purpose, recommended.
+2. With Cockpit Tools installed you can skip exporting entirely: the script decrypts its local account store. It probes `.cockpit_tools` and `.antigravity_cockpit` under the user home directory, and the environment variable `COCKPIT_TOOLS_HOME` overrides the location.
 
-过滤与限定参数：`--account 关键词` 按 email、id、uid 子串过滤，`--cockpit-root 路径` 手动指定 Cockpit 数据根。这些参数写在子命令前面或后面都可以。
+Filtering and scoping flags: `--account <keyword>` filters by a substring of email, id or uid, and `--cockpit-root <path>` sets the Cockpit data root by hand. Both work before or after the subcommand.
 
-结果状态对照：
+Status reference:
 
-| 状态 | 含义 | 要做什么 |
+| Status | Meaning | Action |
 | :-- | :-- | :-- |
-| CLAIMED credit=N | 领取成功，到账 N 积分 | 无 |
-| ALREADY-CLAIMED | 之前已领过 | 无 |
-| INACTIVE | 当前没有可领的活动 | 无。国际站账号无对应活动时显示这个，属正常 |
-| CHECK-FAILED http=401 | 该账号 token 被服务端吊销 | 重新登录获取新凭据后重跑 |
-| CLAIM-FAILED | 查询正常但领取被拒 | 记下响应内容，稍后重试 |
+| CLAIMED credit=N | Claim succeeded, N credits arrived | none |
+| ALREADY-CLAIMED | Claimed before | none |
+| INACTIVE | No campaign available right now | none. The international site has no matching campaign, this is normal |
+| CHECK-FAILED http=401 | The account token was revoked by the server | Log in again for fresh credentials, then rerun |
+| CLAIM-FAILED | Check passed but the claim was rejected | Note the response body, retry later |
 
-## 三、让 AI 操作
+Exit codes: 0 means everything succeeded, 2 means at least one item failed. Handy for scripting.
 
-把下面整段复制发给 AI，在项目根目录下启动会话，替换尖括号内容即可：
+## 3. Handing It to an AI
+
+Copy the block below into an AI session started in the project root and replace the angle-bracket placeholder:
 
 ```text
-帮我领取 CodeBuddy 账号的积分福利。本会话工作目录就是本工具的项目根目录，先读 ./README.md 了解用法与注意事项，然后执行：
-1. 运行 codebuddy_claim.py claim --dry-run --data <凭据文件路径>，把每个账号的状态汇总给我。
-2. dry-run 无异常后去掉 --dry-run 正式领取。
-3. 最后汇报：哪些账号领到了多少积分、哪些已领过、哪些失败及原因。
-约束：CHECK-FAILED http=401 的账号是凭据失效，如实报告即可，由我人工重新获取凭据；不要修改凭据来源应用的任何数据文件；不要把 token 或凭据内容输出到对话之外。
+Claim the CodeBuddy account credits for me. This session's working directory is the root of this tool. Read ./README.md first for usage and caveats, then:
+1. Run `codebuddy_claim.py claim --dry-run --data <credentials file path>` and summarize each account's status for me.
+2. Once the dry run looks clean, drop --dry-run and claim for real.
+3. Report which accounts gained how many credits, which were already claimed, and which failed and why.
+
+Constraints: an account returning CHECK-FAILED http=401 has expired credentials, report it truthfully and I will refresh the credentials by hand; do not modify any data file of the credential source; do not output tokens or credential contents outside this conversation.
 ```
 
-说明：凭据文件路径填你自己的存放位置，相对或绝对均可；本机装有 Cockpit Tools 时可去掉 `--data`，脚本自动探测本机数据根。
+The credentials file path is wherever you keep it, relative or absolute. With Cockpit Tools installed locally you can drop `--data` and let the script probe the local data root itself.
 
-## 四、工作原理
+## 4. How It Works
 
-### 接口
+### Endpoints
 
 ```
-POST https://<domain>/billing/meter/compensation-status   # 查补偿状态
-POST https://<domain>/billing/meter/claim-compensation    # 领补偿
-POST https://<domain>/billing/meter/check-gift-claimed    # 查礼包状态
-POST https://<domain>/billing/meter/claim-gift            # 领礼包
+POST https://<domain>/billing/meter/compensation-status   # compensation status
+POST https://<domain>/billing/meter/claim-compensation    # claim compensation
+POST https://<domain>/billing/meter/check-gift-claimed    # gift status
+POST https://<domain>/billing/meter/claim-gift            # claim gift
 ```
 
-请求头带 `Authorization: Bearer <access_token>` 与 `X-Client-Platform: web`。响应 `code=0` 且 `data.active=true` 且 `data.claimed=false` 才调用领取接口。端点来自 codebuddy.cn 个人中心前端 bundle 的反查，页面为 /profile/plans-usage。
+Requests carry `Authorization: Bearer <access_token>` and `X-Client-Platform: web`. The claim endpoint is only called when the response has `code=0`, `data.active=true` and `data.claimed=false`. The endpoints were recovered by inspecting the front-end bundle of the codebuddy.cn account page at /profile/plans-usage.
 
-### Cockpit Tools 本地存储（可选捷径）
+### Cockpit Tools local storage (optional shortcut)
 
-脚本不会调用该工具，只直接读取其本地数据文件，全程只读：
+The script never invokes that tool. It only reads its local data files, strictly read-only:
 
-- 数据根下有 `secure-account-storage.key`，内容是明文 base64 的 32 字节 AES-256 密钥
-- `codebuddy_accounts\*.json` 与 `workbuddy_accounts\*.json` 为加密账号对象，`nonce` 与 `ciphertext` 是 base64，AES-256-GCM 解密后即凭据 JSON
-- 同一账号在两个目录都有文件时，按 access_token 的 JWT iat 取最新一份
-- 用其他账号管理工具的用户可忽略本节，走 `--data` 凭据文件即可
+- The data root holds `secure-account-storage.key`, a plain base64 encoded 32-byte AES-256 key
+- `codebuddy_accounts\*.json` and `workbuddy_accounts\*.json` hold encrypted account objects, `nonce` and `ciphertext` are base64, and AES-256-GCM decryption yields the credential JSON
+- When the same account exists in both directories, the newest one by the access_token JWT `iat` wins
+- Users of any other account manager can ignore this section and use a `--data` credentials file
 
-### 网络与安全
+### Network and safety
 
-- 必须直连不走系统代理，脚本已内置禁代理；换 HTTP 客户端时要显式禁代理
-- 账号之间有固定间隔，不要并发
-- 对 Cockpit 存储一律只读
-- 凭据文件含登录态，不要提交到任何仓库或同步到公开位置
-- 领取历史写入系统用户数据目录下的 `codebuddy-claim/claim-history.jsonl`（Windows 在 %LOCALAPPDATA%，其他平台回退到用户主目录）
+- A direct connection is required, the script disables proxies on purpose. Any replacement HTTP client must disable them explicitly
+- Accounts are processed with a fixed delay, do not parallelize
+- Cockpit storage is only ever read
+- Credential files carry login state, never commit them to a repository or sync them to a public location
+- Claim history is written to `codebuddy-claim/claim-history.jsonl` under the system user data directory (on Windows %LOCALAPPDATA%, elsewhere the user home directory)
 
-## 五、已知限制
+## 5. Known Limitations
 
-- access_token 失效时脚本会用 refresh_token 尝试续期一次，实测官方对第三方刷新请求返回 401，因此失效账号仍需重新登录获取新凭据
-- access_token 的 JWT exp 只是签发声明，服务端吊销后 list 仍显示 VALID，401 才是真实判据
-- 接口端点来自前端 bundle 反查，官方改版可能导致端点变化，届时重新抓包更新
+- When an access_token stops working the script tries the refresh_token once. In practice the official endpoint returns 401 for third-party refresh requests, so expired accounts still need fresh credentials from a new login
+- The JWT `exp` inside access_token is only a claim made in the token. After a server-side revocation `list` may still report VALID, the 401 is the real signal
+- The endpoints were recovered from a front-end bundle. A site rewrite may change them, in which case capture them again and update the constants
 
-## 六、文件结构
+## 6. Project Layout
 
 ```
 codebuddy-claim/
-├── codebuddy_claim.py            # 主脚本（单文件）
-├── README.md                     # 本文件
+├── codebuddy_claim.py            # main script (single file)
+├── README.md                     # English README (this file)
+├── README.zh-CN.md               # Chinese README
 ├── LICENSE                       # MIT
-├── CONTRIBUTING.md               # 贡献指南
-├── requirements.txt              # cryptography>=42.0，Python 3.9+
-├── .gitignore                    # 排除 .venv、__pycache__、data
+├── CONTRIBUTING.md               # contribution guide
+├── CHANGELOG.md                  # release history
+├── FAQ.md                        # frequently asked questions
+├── SECURITY.md                   # security policy
+├── AUTHORS                       # authors
+├── pyproject.toml                # packaging metadata
+├── requirements.txt              # cryptography>=42.0, Python 3.9+
+├── .gitignore                    # excludes .venv, __pycache__, data
+├── .gitattributes                # line ending and diff rules
+├── .pre-commit-config.yaml       # local text hygiene hooks
 ├── .github/
-│   ├── ISSUE_TEMPLATE/           # 缺陷与需求模板
-│   └── pull_request_template.md  # PR 模板
+│   ├── ISSUE_TEMPLATE/           # bug and feature templates
+│   └── pull_request_template.md  # PR template
 ├── examples/
-│   └── sample-accounts.json      # 凭据文件格式样例，值为随机数
-├── docs/                         # 分析与运行记录
-└── data/                         # 凭据文件存放处（勿提交仓库）
+│   └── sample-accounts.json      # credential format sample, randomized values
+├── docs/                         # analysis and run records
+└── data/                         # credential files (never commit)
 ```

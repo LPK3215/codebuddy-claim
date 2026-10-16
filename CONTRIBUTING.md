@@ -1,21 +1,31 @@
-# 贡献指南
+# Contributing
 
-## 提 issue
+## Reporting issues
 
-- 缺陷：写清现象、复现步骤、运行环境与命令输出。
-- 需求：写清使用场景与期望行为。
+- Bug: describe the symptom, the steps to reproduce, your environment and the command output.
+- Feature: describe the use case and the behaviour you expect.
 
-注意：状态输出里不要贴 `access_token` 或 `refresh_token`，贴之前自行打码。
+Never paste `access_token` or `refresh_token` values. Redact them before posting any output.
 
-## 提 PR
+## Pull requests
 
-1. 从 `main` 拉分支，一个小改动一个 PR。
-2. 保持单文件结构，不引入新的第三方依赖，HTTP 继续用标准库。
-3. 面向终端与日志的输出一律 ASCII 英文，注释可用中文。
-4. 提交前自行跑通 `list` 与 `claim --dry-run`，在 PR 描述里写清验证方式。
+1. Branch off `main`, one small change per pull request.
+2. Keep the single-file layout. Do not add third-party dependencies, and keep using the standard library for HTTP.
+3. Everything printed to the terminal or written to logs must be ASCII English. Comments may be Chinese.
+4. Run `list` and `claim --dry-run` locally before opening the pull request, and describe how you verified the change in the description.
 
-## 硬约定
+## Hard rules
 
-- 脚本对凭据来源只读，任何改动不得写回。
-- 不要提交任何含令牌的文件。
-- 接口路径、超时、重试次数这类易变值集中放在常量区。
+- The script treats every credential source as read-only. No change may write back to one.
+- Never commit a file that contains a token.
+- Endpoint paths, timeouts and retry counts are volatile values, keep them in the constants block.
+
+## Local checks
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe codebuddy_claim.py --data examples/sample-accounts.json list
+.\.venv\Scripts\python.exe -m pip install pre-commit
+.\.venv\Scripts\python.exe -m pre_commit run --all-files
+```

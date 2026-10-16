@@ -1,9 +1,33 @@
 # local virtual environment
 .venv/
+venv/
 
 # python caches
 __pycache__/
-*.pyc
+*.py[cod]
+
+# build artifacts
+build/
+dist/
+*.egg-info/
+
+# test and coverage data
+.pytest_cache/
+.coverage
+htmlcov/
+
+# editors
+.idea/
+.vscode/
+*.swp
+
+# operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
 
 # exported account credentials, never commit
 data/
+
+# local logs
+*.log

@@ -1,0 +1,20 @@
+# normalize line endings in the repository
+* text=auto eol=lf
+
+# source and data files
+*.py    text diff=python
+*.md    text
+*.json  text
+*.toml  text
+*.yaml  text
+*.yml   text
+*.txt   text
+
+# shell scripts keep LF, batch files need CRLF
+*.sh    text eol=lf
+*.bat   text eol=crlf
+
+# binary assets
+*.png   binary
+*.jpg   binary
+*.ico   binary
