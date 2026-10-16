@@ -24,7 +24,7 @@ file, one dependency, no browser automation.
 ## Features
 
 - **Batch across every account.** One run covers all accounts found in the credential source, no per-account clicking.
-- **Two credential sources.** Point `--data` at an exported JSON file, or let the script decrypt the local account store of Cockpit Tools.
+- **Two credential sources.** Point `--data` at an exported JSON file, or let the script decrypt the local account store of Cockpit Tools, a desktop account manager for these services.
 - **Read-only by design.** Neither the export file nor the account store is ever written back to.
 - **Safe to repeat.** Before claiming, each reward is checked server side, so already claimed rewards are skipped and rerunning is harmless.
 - **Dry run first.** `claim --dry-run` reports exactly what would be claimed and claims nothing.
@@ -48,6 +48,15 @@ The package can also be installed, which puts a `codebuddy-claim` command on the
 ```powershell
 .\.venv\Scripts\python.exe -m pip install .
 codebuddy-claim list --data examples\sample-accounts.json
+```
+
+Either way, confirm the install with the bundled sample before touching a real account. Its values are randomized, so this proves the tool runs end to end without any credential of yours:
+
+```text
+accounts: 3
+ 1. account-one@example.com uid=3f7a91c4 www.codebuddy.cn  token=VALID 19d    expires=2026-11-05 status=normal
+ 2. account-two@example.com uid=91827364 www.codebuddy.ai  token=VALID 24d    expires=2026-11-10 status=normal
+ 3. account-three@example.com uid= www.codebuddy.cn  token=UNKNOWN      expires=? status=?
 ```
 
 ### 2. Prepare a credentials file
@@ -75,6 +84,15 @@ If the export source has no `domain` field, add one by hand. There are only two 
 A complete sample with randomized values lives in `examples/sample-accounts.json` and runs as is. Use it as a template: it covers a fully populated entry, a numeric id, and a minimal entry with only the two mandatory fields.
 
 If you happen to use Cockpit Tools, its account export already matches this format and works directly. When it is installed locally you can also skip exporting and let the script read the local data itself, see [How It Works](#how-it-works).
+
+#### Where the credentials come from
+
+Two practical routes:
+
+1. From an account manager that can export a token, Cockpit Tools included. Export, then point `--data` at the file.
+2. By hand, from the login state of your own account in the service web console. Start from `examples/sample-accounts.json`, keep the two mandatory fields, and add whichever optional ones you have. A minimal file runs fine.
+
+The file stays on your machine. The tool uploads it nowhere and writes back to nothing.
 
 ### 3. Run
 
@@ -106,6 +124,19 @@ Status reference:
 | CLAIM-FAILED | Check passed but the claim was rejected | Note the response body, retry later |
 
 Exit codes: 0 means everything succeeded, 2 means at least one item failed. Handy for scripting.
+
+What a run looks like on screen. Every reward item gets one line, then a summary:
+
+```text
+[1/3] account-one@example.com uid=3f7a91c4 domain=www.codebuddy.cn
+      compensation: CHECK-FAILED http=401 (response body omitted)
+      gift:         CHECK-FAILED http=401 (response body omitted)
+
+summary: accounts=3 failed_items=6 (dry-run, nothing claimed)
+history: <user data dir>\codebuddy-claim\claim-history.jsonl
+```
+
+The block above is a real dry run against the bundled sample file, which is why every account returns 401: its tokens are fake. A genuine account prints `ALREADY-CLAIMED`, `INACTIVE` or `CLAIMED credit=N` instead.
 
 ## Handing It to an AI
 

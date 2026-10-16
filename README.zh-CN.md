@@ -23,7 +23,7 @@ codebuddy-claim 遍历本机已有的 CodeBuddy 账号，把每个账号可领�
 ## 核心特性
 
 - **一次覆盖全部账号。** 一次运行处理凭据源里的所有账号，不需要逐个点击。
-- **两种凭据来源。** `--data` 指向导出的 JSON 文件，或让脚本解密 Cockpit Tools 的本地账号库。
+- **两种凭据来源。** `--data` 指向导出的 JSON 文件，或让脚本解密 Cockpit Tools 的本地账号库。它是这类服务的桌面账号管理工具。
 - **只读设计。** 导出文件与账号库都不会被写回。
 - **重复运行无副作用。** 领取前先向服务端确认状态，已领过的自动跳过，重跑是安全的。
 - **先干跑。** `claim --dry-run` 只报告会领到什么，不做任何领取动作。
@@ -47,6 +47,15 @@ Windows 用 `.\.venv\Scripts\python.exe` 调用解释器，macOS/Linux 用 `.ven
 ```powershell
 .\.venv\Scripts\python.exe -m pip install .
 codebuddy-claim list --data examples\sample-accounts.json
+```
+
+无论走哪条路，正式用真实账号之前先用自带样例确认装好了。样例的值是随机数，走这一步不会碰到你自己的任何凭据：
+
+```text
+accounts: 3
+ 1. account-one@example.com uid=3f7a91c4 www.codebuddy.cn  token=VALID 19d    expires=2026-11-05 status=normal
+ 2. account-two@example.com uid=91827364 www.codebuddy.ai  token=VALID 24d    expires=2026-11-10 status=normal
+ 3. account-three@example.com uid= www.codebuddy.cn  token=UNKNOWN      expires=? status=?
 ```
 
 ### 2. 准备凭据文件
@@ -74,6 +83,15 @@ codebuddy-claim list --data examples\sample-accounts.json
 带随机数值的完整样例见 `examples/sample-accounts.json`，可直接拿来试跑，也可以当模板照填。样例覆盖三种情形：字段全填的、id 与 uid 用数字的、只填两个必需字段的。
 
 如果你用的恰好是 Cockpit Tools：它的账号导出功能导出的就是这个格式，直接可用；本机装有它时也可以跳过导出，让脚本自动读取本地数据，见[工作原理](#工作原理)。
+
+#### 凭据从哪里来
+
+两条现实路径：
+
+1. 用能导出令牌的账号管理工具，Cockpit Tools 是其中之一。导出后把 `--data` 指过去即可。
+2. 手动准备。从你自己账号在服务网页端控制台的登录态里取令牌，照着 `examples/sample-accounts.json` 的形状写，两个必需字段不能少，其余字段有就填。只写最少字段也能跑。
+
+这份文件只留在你本机。工具不上传它，也不写回任何来源。
 
 ### 3. 运行
 
@@ -105,6 +123,19 @@ codebuddy-claim list --data examples\sample-accounts.json
 | CLAIM-FAILED | 查询正常但领取被拒 | 记下响应内容，稍后重试 |
 
 退出码：0 表示全部正常，2 表示存在失败条目，便于外部脚本判断。
+
+运行时长这样。每一条奖励一行，末尾一条汇总：
+
+```text
+[1/3] account-one@example.com uid=3f7a91c4 domain=www.codebuddy.cn
+      compensation: CHECK-FAILED http=401 (response body omitted)
+      gift:         CHECK-FAILED http=401 (response body omitted)
+
+summary: accounts=3 failed_items=6 (dry-run, nothing claimed)
+history: <user data dir>\codebuddy-claim\claim-history.jsonl
+```
+
+上面这段是针对自带样例文件的真实 dry-run 输出，所以每个账号都返回 401，因为样例里的令牌是假的。换成真实账号会输出 `ALREADY-CLAIMED`、`INACTIVE` 或 `CLAIMED credit=N`。
 
 ## 让 AI 操作
 

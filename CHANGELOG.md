@@ -26,6 +26,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ### Changed
 
+- README gained a credential source guide, an install verification step backed by real sample output, and a real terminal output example. Both language versions stay section for section aligned.
 - Credential format guidance consolidated into `examples/sample-accounts.json`. The duplicate template under `docs/` is gone, and the sample doubles as a fill-in template.
 - `docs/PROJECT-ANALYSIS.md` trimmed to design notes, trade-offs and the verification record. The per-fix detail now lives only in this changelog.
 - Local run records moved out of the repository. The file stays on disk and is git-ignored.
