@@ -1,6 +1,6 @@
 # CodeBuddy 账号奖励领取工具 设计说明
 
-本文说明工具的运行链路、设计取舍与已知边界。用法与字段要求见 [README.zh-CN.md](../README.zh-CN.md)，版本变更见 [CHANGELOG.md](../CHANGELOG.md)。
+本文说明工具的运行链路、设计取舍与已知边界。用法与字段要求见 [README.md](../README.md)，版本变更见 [CHANGELOG.md](../CHANGELOG.md)。
 
 ## 一、项目定位
 
