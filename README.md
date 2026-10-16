@@ -1,14 +1,8 @@
 <div align="center">
 
-<img src="./docs/assets/banner.svg" alt="codebuddy-claim" width="100%"/>
-
-[![version](https://img.shields.io/badge/version-0.1.0-22d3ee)](./CHANGELOG.md)
-[![license](https://img.shields.io/badge/license-MIT-4f9cf9)](./LICENSE)
-[![python](https://img.shields.io/badge/python-3.9%2B-3776ab)](./pyproject.toml)
-[![platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-6f8299)](./README.md)
-[![dependency](https://img.shields.io/badge/dependency-cryptography-8b9bb0)](./requirements.txt)
-
 **Claim CodeBuddy account credits for every account on your machine, with one command.**
+
+[![license](https://img.shields.io/badge/license-MIT-4f9cf9)](./LICENSE)
 
 codebuddy-claim walks every CodeBuddy account you keep on a machine and claims the activity
 compensation and welcome gift each one is entitled to. It reads the credentials you already have,
@@ -218,11 +212,11 @@ codebuddy-claim/
 │   ├── ISSUE_TEMPLATE/           # bug and feature templates
 │   └── pull_request_template.md  # PR template
 ├── scripts/
-│   └── visualization/            # SVG generators for the images above
+│   └── visualization/            # generator for the data flow diagram above
 ├── examples/
 │   └── sample-accounts.json      # credential format sample and template
 └── docs/
-    ├── assets/                   # banner and diagram SVGs
+    ├── assets/                   # data flow diagram SVG
     └── PROJECT-ANALYSIS.md       # design notes and verification record
 ```
 

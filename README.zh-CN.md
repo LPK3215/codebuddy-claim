@@ -1,14 +1,8 @@
 <div align="center">
 
-<img src="./docs/assets/banner.svg" alt="codebuddy-claim" width="100%"/>
-
-[![version](https://img.shields.io/badge/version-0.1.0-22d3ee)](./CHANGELOG.md)
-[![license](https://img.shields.io/badge/license-MIT-4f9cf9)](./LICENSE)
-[![python](https://img.shields.io/badge/python-3.9%2B-3776ab)](./pyproject.toml)
-[![platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-6f8299)](./README.zh-CN.md)
-[![dependency](https://img.shields.io/badge/dependency-cryptography-8b9bb0)](./requirements.txt)
-
 **一条命令，领取本机全部 CodeBuddy 账号的积分福利。**
+
+[![license](https://img.shields.io/badge/license-MIT-4f9cf9)](./LICENSE)
 
 codebuddy-claim 遍历本机已有的 CodeBuddy 账号，把每个账号可领的活动补偿与欢迎礼包一次领完。
 凭据用手上已有的一份，导出文件或本地账号库都行，全程只读不写回。单个 Python 文件，一个依赖，
@@ -216,11 +210,11 @@ codebuddy-claim/
 │   ├── ISSUE_TEMPLATE/           # 缺陷与需求模板
 │   └── pull_request_template.md  # PR 模板
 ├── scripts/
-│   └── visualization/            # 上方图片的 SVG 生成脚本
+│   └── visualization/            # 流程图的 SVG 生成脚本
 ├── examples/
 │   └── sample-accounts.json      # 凭据文件格式样例，也可当模板
 └── docs/
-    ├── assets/                   # 横幅与流程图 SVG
+    ├── assets/                   # 流程图 SVG
     └── PROJECT-ANALYSIS.md       # 设计说明与验证记录
 ```
 
