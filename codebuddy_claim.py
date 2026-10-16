@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """CodeBuddy credits claim tool.
 
-Batch-claims activity rewards (DeepSeek compensation, welcome gift) for
+Batch-claims activity rewards (activity compensation, welcome gift) for
 CodeBuddy accounts managed by Cockpit Tools.
 
 Credential sources (pick one):

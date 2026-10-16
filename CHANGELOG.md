@@ -10,7 +10,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ### Added
 
-- Batch claim of DeepSeek compensation and welcome gift rewards across every account.
+- Batch claim of the activity compensation and welcome gift rewards across every CodeBuddy account.
 - Two credential sources: an exported JSON file via `--data`, or the encrypted local store of Cockpit Tools.
 - `list` and `claim` subcommands, with `--dry-run` to report claimable rewards without claiming anything.
 - `--account` filter and `--cockpit-root` override.
@@ -43,3 +43,4 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Numeric `id` and `uid` values no longer raise an error during filtering.
 - `claim-history.jsonl` rotates to `.1` once it grows past 5 MiB instead of growing forever.
 - Python 3.9 is declared as the minimum version, matching the `HTTPResponse.status` usage.
+- The script docstring and this changelog named the wrong product, both now say CodeBuddy.
