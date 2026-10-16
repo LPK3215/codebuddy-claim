@@ -29,5 +29,8 @@ desktop.ini
 # exported account credentials, never commit
 data/
 
+# local-only run records, never part of the public docs
+docs/RUNLOG.md
+
 # local logs
 *.log

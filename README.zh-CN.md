@@ -51,7 +51,7 @@ codebuddy-claim list --data examples\sample-accounts.json
 
 ### 2. 准备凭据文件
 
-脚本不会调用任何账号管理工具的导入导出功能，它只读一份 JSON 凭据文件。无论你用什么工具管理账号，把数据整理成下面的格式即可，模板见 `docs/credentials-template.json`。
+脚本不会调用任何账号管理工具的导入导出功能，它只读一份 JSON 凭据文件。无论你用什么工具管理账号，把数据整理成下面的格式即可。
 
 文件为 UTF-8 编码的 JSON 数组，每个元素一个账号。字段要求：
 
@@ -71,7 +71,7 @@ codebuddy-claim list --data examples\sample-accounts.json
 
 如果导出源里没有 domain 字段，手动补一个即可。取值只有 www.codebuddy.cn 与 www.codebuddy.ai 两种，按账号实际所属站点选。
 
-带随机数值的完整样例见 `examples/sample-accounts.json`，可直接拿来试跑。
+带随机数值的完整样例见 `examples/sample-accounts.json`，可直接拿来试跑，也可以当模板照填。样例覆盖三种情形：字段全填的、id 与 uid 用数字的、只填两个必需字段的。
 
 如果你用的恰好是 Cockpit Tools：它的账号导出功能导出的就是这个格式，直接可用；本机装有它时也可以跳过导出，让脚本自动读取本地数据，见[工作原理](#工作原理)。
 
@@ -113,7 +113,7 @@ codebuddy-claim list --data examples\sample-accounts.json
 ```text
 帮我领取 CodeBuddy 账号的积分福利。本会话工作目录就是本工具的项目根目录，先读 ./README.md 了解用法与注意事项，然后执行：
 1. 运行 codebuddy_claim.py claim --dry-run --data <凭据文件路径>，把每个账号的状态汇总给我。
-2. dry-run 无异常后去掉 --dry-run 正式领取。
+2. 然后去掉 --dry-run 正式领取。部分账号返回 401 属预期，代表凭据已失效，不要因此停下。
 3. 最后汇报：哪些账号领到了多少积分、哪些已领过、哪些失败及原因。
 约束：CHECK-FAILED http=401 的账号是凭据失效，如实报告即可，由我人工重新获取凭据；不要修改凭据来源应用的任何数据文件；不要把 token 或凭据内容输出到对话之外。
 ```
@@ -187,14 +187,13 @@ codebuddy-claim/
 ├── scripts/
 │   └── visualization/            # 上方图片的 SVG 生成脚本
 ├── examples/
-│   └── sample-accounts.json      # 凭据文件格式样例，值为随机数
-├── docs/
-│   ├── assets/                   # 横幅与流程图 SVG
-│   ├── PROJECT-ANALYSIS.md       # 代码审查与修复记录
-│   ├── RUNLOG.md                 # 本机运行记录，不属于对外文档
-│   └── credentials-template.json # 空白凭据模板
-└── data/                         # 凭据文件存放处（勿提交仓库）
+│   └── sample-accounts.json      # 凭据文件格式样例，也可当模板
+└── docs/
+    ├── assets/                   # 横幅与流程图 SVG
+    └── PROJECT-ANALYSIS.md       # 设计说明与验证记录
 ```
+
+`data/` 存放你自己的凭据文件，已被忽略，因此不出现在上面的结构树里。
 
 ## 已知限制
 

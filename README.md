@@ -52,7 +52,7 @@ codebuddy-claim list --data examples\sample-accounts.json
 
 ### 2. Prepare a credentials file
 
-The script never calls any account manager's import or export feature. It reads a single JSON credentials file. Whatever tool manages your accounts, getting the data into the shape below is enough. A template lives in `docs/credentials-template.json`.
+The script never calls any account manager's import or export feature. It reads a single JSON credentials file. Whatever tool manages your accounts, getting the data into the shape below is enough.
 
 The file is a UTF-8 JSON array with one element per account. Field requirements:
 
@@ -72,7 +72,7 @@ Only `access_token` and `domain` are mandatory. If either is missing or an empty
 
 If the export source has no `domain` field, add one by hand. There are only two possible values, pick the site the account actually belongs to.
 
-A complete sample with randomized values lives in `examples/sample-accounts.json` and runs as is.
+A complete sample with randomized values lives in `examples/sample-accounts.json` and runs as is. Use it as a template: it covers a fully populated entry, a numeric id, and a minimal entry with only the two mandatory fields.
 
 If you happen to use Cockpit Tools, its account export already matches this format and works directly. When it is installed locally you can also skip exporting and let the script read the local data itself, see [How It Works](#how-it-works).
 
@@ -114,7 +114,7 @@ Copy the block below into an AI session started in the project root and replace 
 ```text
 Claim the CodeBuddy account credits for me. This session's working directory is the root of this tool. Read ./README.md first for usage and caveats, then:
 1. Run `codebuddy_claim.py claim --dry-run --data <credentials file path>` and summarize each account's status for me.
-2. Once the dry run looks clean, drop --dry-run and claim for real.
+2. Then drop --dry-run and claim for real. A 401 on some accounts is expected, it means those credentials expired, do not stop for it.
 3. Report which accounts gained how many credits, which were already claimed, and which failed and why.
 
 Constraints: an account returning CHECK-FAILED http=401 has expired credentials, report it truthfully and I will refresh the credentials by hand; do not modify any data file of the credential source; do not output tokens or credential contents outside this conversation.
@@ -189,14 +189,13 @@ codebuddy-claim/
 ├── scripts/
 │   └── visualization/            # SVG generators for the images above
 ├── examples/
-│   └── sample-accounts.json      # credential format sample, randomized values
-├── docs/
-│   ├── assets/                   # banner and diagram SVGs
-│   ├── PROJECT-ANALYSIS.md       # code review and fix record
-│   ├── RUNLOG.md                 # local run log, not part of the public docs
-│   └── credentials-template.json # blank credentials template
-└── data/                         # credential files (never commit)
+│   └── sample-accounts.json      # credential format sample and template
+└── docs/
+    ├── assets/                   # banner and diagram SVGs
+    └── PROJECT-ANALYSIS.md       # design notes and verification record
 ```
+
+`data/` holds your own credential files and is git-ignored, so it never appears in the tree above.
 
 ## Known Limitations
 
