@@ -1,37 +1,33 @@
-# FAQ
+# 常见问题
 
-## Which credentials does the script need?
+## 需要哪些凭据字段？
 
-Only two fields per account are mandatory: `access_token` and `domain`. Everything else is optional and only affects display or filtering. See the field table in the README.
+每个账号只有两个字段是必需的：`access_token` 与 `domain`。其余全部可选，只影响展示或过滤。完整字段表见 README。
 
-## Can I use a tool other than Cockpit Tools?
+## 不用 Cockpit Tools 可以吗？
 
-Yes. The script only reads a JSON credentials file. Export the accounts from whatever tool you use and reshape them into the documented format. Cockpit Tools is one convenient source, not a requirement.
+可以。脚本只读一份 JSON 凭据文件，用 Cockpit Tools 只是其中一条捷径，不是必需。任何工具导出的数据，整理成文档里的格式就能用。
 
-## Why does an account show INACTIVE?
+## 为什么账号显示 INACTIVE？
 
-There is no claimable campaign for it right now. Accounts on the international site, www.codebuddy.ai, have no matching domestic campaign and normally show INACTIVE. No action needed.
+它当前没有可领的活动。国际站 www.codebuddy.ai 的账号没有对应的国内活动，显示 INACTIVE 属正常，不用处理。
 
-## Why does an account show CHECK-FAILED http=401?
+## 为什么账号显示 CHECK-FAILED http=401？
 
-The server revoked that account's token. The JWT expiry stored locally is only a claim made inside the token, the server decides. Log the account in again in your account manager, then rerun.
+服务端把这个账号的令牌吊销了。本地存的 JWT 过期时间只是令牌内部的声明，真正说了算的是服务端。重新登录该账号后重跑即可。
 
-## Why does `list` report VALID for an account that then fails with 401?
+## 为什么 list 显示 VALID，claim 却返回 401？
 
-`list` can only compare the local `expires_at` against the clock. A token can be perfectly unexpired and still be revoked server-side. The 401 is the authoritative signal.
+`list` 只能拿本地的 `expires_at` 与当前时间比。令牌可以既没过期、又被服务端吊销。401 才是权威判据。
 
-## Can a claim be duplicated by running the command twice?
+## 重复跑会不会领两次？
 
-No. Before claiming, the script asks the server whether the reward was already taken. Already claimed accounts are skipped, so repeated runs are safe.
+不会。领取之前脚本先向服务端确认状态，已领过的直接跳过，重复运行是安全的。
 
-## Can I install it instead of calling the script?
+## 需要挂代理吗？
 
-Yes. `pip install .` installs the package and puts a `codebuddy-claim` command on the PATH, so `codebuddy-claim claim --data <path>` works from any directory. Running `codebuddy_claim.py` directly from the project root behaves identically.
+不需要，脚本还会主动禁用代理。它在构建 opener 时挂了空的 ProxyHandler，强制直连。换成别的 HTTP 客户端时要记得显式禁用代理。
 
-## Does the script work behind a proxy?
+## 领取历史存在哪？
 
-No, and that is deliberate. It builds its opener with an empty proxy handler to force a direct connection. If you swap in another HTTP client, disable proxies explicitly.
-
-## Where is the claim history stored?
-
-In `claim-history.jsonl` under the system user data directory: `%LOCALAPPDATA%\codebuddy-claim\` on Windows, the user home directory elsewhere. The file rotates to `.1` once it grows past 5 MiB.
+在系统用户数据目录下的 `claim-history.jsonl`：Windows 是 `%LOCALAPPDATA%\codebuddy-claim\`，其他平台是用户主目录。文件超过 5 MiB 会轮转成 `.1`。

@@ -1,24 +1,24 @@
-# Security Policy
+# 安全策略
 
-## Supported versions
+## 支持范围
 
-Only the latest commit on `main` is supported. This is a single-file tool and fixes land on `main` directly.
+只支持 `main` 上的最新提交。项目是单文件工具，修复直接落在 `main`。
 
-## Reporting a vulnerability
+## 上报漏洞
 
-Use GitHub's private vulnerability reporting on this repository. If that is unavailable, open an issue that describes the problem without any sensitive detail.
+请使用仓库的私密漏洞上报功能。如果那个用不了，开 issue 时只描述问题本身，不要带任何敏感细节。
 
-Never include real `access_token` or `refresh_token` values, or a credential file, in a report. Redact them first.
+上报内容里不要包含真实的 `access_token`、`refresh_token`，也不要附带凭据文件。贴之前先打码。
 
-## How credentials are handled
+## 凭据是怎么处理的
 
-- Credential files and the Cockpit Tools store are opened read-only. The tool never writes back.
-- Credentials are only sent to `https://<domain>/billing/meter/*`, the same origin the account page uses.
-- Token values are never printed, logged, or written to the claim history. The history records account identifiers and per-item status only.
-- Proxy settings are disabled on purpose, so traffic does not silently pass through an intermediary.
-- The tool is meant for credentials you own, on your own machine.
+- 凭据文件与 Cockpit 账号库一律只读打开，工具从不写回。
+- 凭据只发往 `https://<domain>/billing/meter/*`，也就是账号页面本身用的同一个来源。
+- 令牌值不会打印、不会记日志、不会写进领取历史。历史里只有账号标识与每一项的状态。
+- 代理被有意禁用，流量不会悄悄经过中间人。
+- 这个工具面向你自己的凭据，在你自己的机器上运行。
 
-## Out of scope
+## 不在范围内
 
-- The reward endpoints belong to the platform. A change on their side is not a vulnerability of this tool.
-- Credentials leaked by copying a `data/` file into a repository or a public location are a user-side mistake. The shipped `.gitignore` excludes `data/` for that reason.
+- 奖励接口属于平台方。他们那边改版不算这个工具的漏洞。
+- 把 `data/` 目录里的文件复制进仓库或公开位置导致的凭据泄露，属于使用方操作失误。仓库自带的 `.gitignore` 已经排除 `data/`，正是为了防这个。

@@ -198,10 +198,10 @@ codebuddy-claim/
 ├── README.md                     # Chinese README, the default shown on GitHub
 ├── README.en.md                  # English README (this file)
 ├── LICENSE                       # MIT
-├── CONTRIBUTING.md               # contribution guide
-├── CHANGELOG.md                  # release history
-├── FAQ.md                        # frequently asked questions
-├── SECURITY.md                   # security policy
+├── CONTRIBUTING.md               # contribution guide (Chinese)
+├── CHANGELOG.md                  # release history (English)
+├── FAQ.md                        # frequently asked questions (Chinese)
+├── SECURITY.md                   # security policy (Chinese)
 ├── AUTHORS                       # authors
 ├── pyproject.toml                # packaging metadata
 ├── requirements.txt              # cryptography>=42.0, Python 3.9+
@@ -231,7 +231,7 @@ codebuddy-claim/
 
 ## FAQ
 
-Common questions, including which credentials are mandatory, why an account shows INACTIVE, and what a 401 means, are answered in [FAQ.md](FAQ.md).
+Common questions, including which credentials are mandatory, why an account shows INACTIVE, and what a 401 means, are answered in [FAQ.md](FAQ.md). The companion documents, meaning the FAQ, the contributing guide and the security policy, are written in Chinese. This README and the changelog are in English.
 
 ## Contributing
 

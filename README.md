@@ -197,7 +197,7 @@ codebuddy-claim/
 ├── README.en.md                  # 英文说明
 ├── LICENSE                       # MIT
 ├── CONTRIBUTING.md               # 贡献指南
-├── CHANGELOG.md                  # 版本变更记录
+├── CHANGELOG.md                  # 版本变更记录（英文）
 ├── FAQ.md                        # 常见问题
 ├── SECURITY.md                   # 安全策略
 ├── AUTHORS                       # 作者

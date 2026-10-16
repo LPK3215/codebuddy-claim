@@ -1,26 +1,26 @@
-# Contributing
+# 贡献指南
 
-## Reporting issues
+## 提 issue
 
-- Bug: describe the symptom, the steps to reproduce, your environment and the command output.
-- Feature: describe the use case and the behaviour you expect.
+- 缺陷：写清现象、复现步骤、运行环境与命令输出。
+- 需求：写清使用场景与期望行为。
 
-Never paste `access_token` or `refresh_token` values. Redact them before posting any output.
+注意：状态输出里不要贴 `access_token` 或 `refresh_token`，贴之前自行打码。
 
-## Pull requests
+## 提 PR
 
-1. Branch off `main`, one small change per pull request.
-2. Keep the single-file layout. Do not add third-party dependencies, and keep using the standard library for HTTP.
-3. Everything printed to the terminal or written to logs must be ASCII English. Comments may be Chinese.
-4. Run `list` and `claim --dry-run` locally before opening the pull request, and describe how you verified the change in the description.
+1. 从 `main` 拉分支，一个小改动一个 PR。
+2. 保持单文件结构，不引入新的第三方依赖，HTTP 继续用标准库。
+3. 面向终端与日志的输出一律 ASCII 英文，注释可用中文。
+4. 提交前自行跑通 `list` 与 `claim --dry-run`，在 PR 描述里写清验证方式。
 
-## Hard rules
+## 硬约定
 
-- The script treats every credential source as read-only. No change may write back to one.
-- Never commit a file that contains a token.
-- Endpoint paths, timeouts and retry counts are volatile values, keep them in the constants block.
+- 脚本对凭据来源只读，任何改动不得写回。
+- 不要提交任何含令牌的文件。
+- 接口路径、超时、重试次数这类易变值集中放在常量区。
 
-## Local checks
+## 本地检查
 
 ```powershell
 python -m venv .venv
@@ -31,11 +31,11 @@ python -m venv .venv
 .\.venv\Scripts\python.exe -m pre_commit run --all-files
 ```
 
-Packaging metadata lives in `pyproject.toml`. Verify it still builds and installs before touching it:
+打包元数据在 `pyproject.toml`，动它之前先验证还能装能跑：
 
 ```powershell
 .\.venv\Scripts\python.exe -m pip install .
 codebuddy-claim --data examples\sample-accounts.json list
 ```
 
-Remove the `build/` directory and the `*.egg-info/` directory that the install leaves behind, both are git-ignored and easy to forget.
+装完记得清掉 `build/` 与 `*.egg-info/` 两个目录，它们被忽略，但容易忘了清。

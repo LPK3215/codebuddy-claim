@@ -26,6 +26,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ### Changed
 
+- The contributing guide, the FAQ and the security policy are now in Chinese.
 - README language roles swapped: `README.md` is Chinese and shows by default on GitHub, `README.en.md` is the English companion. Repository descriptions on all three mirrors are Chinese only.
 - Repository description now carries Chinese keywords, and three more topics were added, so the project surfaces in local-language searches.
 - README states the exact coverage: activity compensation and welcome gift only, tied to the endpoints in `CHECK_ENDPOINTS`.
