@@ -1,0 +1,9 @@
+# local virtual environment
+.venv/
+
+# python caches
+__pycache__/
+*.pyc
+
+# exported account credentials, never commit
+data/

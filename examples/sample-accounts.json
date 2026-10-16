@@ -1,0 +1,28 @@
+{
+  "accounts": [
+    {
+      "id": "b1f0c7a3-2d84-4e19-9f60-5c3a7d1e8b42",
+      "email": "account-one@example.com",
+      "uid": "3f7a91c4",
+      "domain": "www.codebuddy.cn",
+      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzZjdhOTFjNCIsImlhdCI6MTc5MjQwMDAwMH0.Qk7mR2xV9pLzT4nB8sD1fH6yJ0aC3eG5",
+      "refresh_token": "d8e2f4a6c0b1d3e5f7a9c2b4d6e8f0a1",
+      "expires_at": 1793865600000,
+      "status": "normal"
+    },
+    {
+      "id": 475829106,
+      "email": "account-two@example.com",
+      "uid": 918273645,
+      "domain": "www.codebuddy.ai",
+      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5MTgyNzM2NDUiLCJpYXQiOjE3OTI0MzIwMDB9.Wc4nQ8pR5tLzY2bX7mD9fK1aH3sJ6eG0",
+      "expires_at": 1794300000000,
+      "status": "normal"
+    },
+    {
+      "email": "account-three@example.com",
+      "domain": "www.codebuddy.cn",
+      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJub25lIiwiaWF0IjoxNzkyNDY0MDAwfQ.Px2vB6nM9kL4jH8gF1dS3aQ7wE5rT0yU"
+    }
+  ]
+}
