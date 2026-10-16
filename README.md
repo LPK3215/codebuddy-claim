@@ -1,5 +1,7 @@
 <div align="center">
 
+# codebuddy-claim
+
 **一条命令，批量领取本机全部 CodeBuddy 账号的积分福利（活动补偿与欢迎礼包）。**
 
 [![license](https://img.shields.io/badge/license-MIT-4f9cf9)](./LICENSE)

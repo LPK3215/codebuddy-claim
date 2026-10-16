@@ -1,5 +1,7 @@
 <div align="center">
 
+# codebuddy-claim
+
 **Batch claim the CodeBuddy activity compensation and welcome gift for every account on your machine, with one command.**
 
 [![license](https://img.shields.io/badge/license-MIT-4f9cf9)](./LICENSE)
