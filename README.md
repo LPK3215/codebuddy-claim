@@ -116,8 +116,13 @@ POST https://<domain>/billing/meter/claim-gift            # 领礼包
 codebuddy-claim/
 ├── codebuddy_claim.py            # 主脚本（单文件）
 ├── README.md                     # 本文件
+├── LICENSE                       # MIT
+├── CONTRIBUTING.md               # 贡献指南
 ├── requirements.txt              # cryptography>=42.0，Python 3.9+
 ├── .gitignore                    # 排除 .venv、__pycache__、data
+├── .github/
+│   ├── ISSUE_TEMPLATE/           # 缺陷与需求模板
+│   └── pull_request_template.md  # PR 模板
 ├── examples/
 │   └── sample-accounts.json      # 凭据文件格式样例，值为随机数
 ├── docs/                         # 分析与运行记录
