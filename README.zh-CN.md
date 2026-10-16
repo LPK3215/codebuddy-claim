@@ -1,6 +1,6 @@
 <div align="center">
 
-**一条命令，领取本机全部 CodeBuddy 账号的积分福利。**
+**一条命令，批量领取本机全部 CodeBuddy 账号的积分福利（活动补偿与欢迎礼包）。**
 
 [![license](https://img.shields.io/badge/license-MIT-4f9cf9)](./LICENSE)
 
@@ -222,6 +222,7 @@ codebuddy-claim/
 
 ## 已知限制
 
+- 只覆盖活动补偿与欢迎礼包两类奖励，也就是 `CHECK_ENDPOINTS` 里列出的那几个端点。官方新上线其他类型的活动不会被自动覆盖，要支持只需在该常量里再补一条，其他代码不用动。
 - access_token 失效时脚本会用 refresh_token 尝试续期一次，实测官方对第三方刷新请求返回 401，因此失效账号仍需重新登录获取新凭据
 - access_token 的 JWT exp 只是签发声明，服务端吊销后 list 仍显示 VALID，401 才是真实判据
 - 接口端点来自前端 bundle 反查，官方改版可能导致端点变化，届时重新抓包更新

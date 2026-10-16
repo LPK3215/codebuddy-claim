@@ -26,6 +26,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ### Changed
 
+- Repository description now carries Chinese keywords, and three more topics were added, so the project surfaces in local-language searches.
+- README states the exact coverage: activity compensation and welcome gift only, tied to the endpoints in `CHECK_ENDPOINTS`.
 - README landing section slimmed down: the decorative banner and four of the five badges are gone, the license badge stays.
 - README gained a credential source guide, an install verification step backed by real sample output, and a real terminal output example. Both language versions stay section for section aligned.
 - Credential format guidance consolidated into `examples/sample-accounts.json`. The duplicate template under `docs/` is gone, and the sample doubles as a fill-in template.

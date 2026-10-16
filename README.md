@@ -1,6 +1,6 @@
 <div align="center">
 
-**Claim CodeBuddy account credits for every account on your machine, with one command.**
+**Batch claim the CodeBuddy activity compensation and welcome gift for every account on your machine, with one command.**
 
 [![license](https://img.shields.io/badge/license-MIT-4f9cf9)](./LICENSE)
 
@@ -224,6 +224,7 @@ codebuddy-claim/
 
 ## Known Limitations
 
+- Two reward kinds only: the activity compensation and the welcome gift. The tool covers exactly the endpoints in `CHECK_ENDPOINTS`. A new campaign type on the service side is not picked up automatically, covering it needs one more entry in that tuple and nothing else.
 - When an access_token stops working the script tries the refresh_token once. In practice the official endpoint returns 401 for third-party refresh requests, so expired accounts still need fresh credentials from a new login
 - The JWT `exp` inside access_token is only a claim made in the token. After a server-side revocation `list` may still report VALID, the 401 is the real signal
 - The endpoints were recovered from a front-end bundle. A site rewrite may change them, in which case capture them again and update the constants
