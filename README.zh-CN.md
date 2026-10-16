@@ -32,18 +32,29 @@
 
 ## 二、怎么用
 
-以下命令均在项目根目录下执行。Windows 用 `.\.venv\Scripts\python.exe`，macOS/Linux 用 `.venv/bin/python`：
+以下命令均在项目根目录下执行。先建虚拟环境并装依赖：
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
+```
 
+Windows 用 `.\.venv\Scripts\python.exe` 调用解释器，macOS/Linux 用 `.venv/bin/python`。然后：
+
+```powershell
 .\.venv\Scripts\python.exe codebuddy_claim.py list             # 看有哪些账号、token 是否有效
 .\.venv\Scripts\python.exe codebuddy_claim.py claim --dry-run  # 只查谁可以领，不领取
 .\.venv\Scripts\python.exe codebuddy_claim.py claim            # 正式领取
 ```
 
-日常只需要最后一条。有新活动时跑一次即可，已领过的账号自动跳过，重复跑没有副作用。
+也可以把项目装成包，装完多一个 `codebuddy-claim` 命令：
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install .
+codebuddy-claim list --data examples\sample-accounts.json
+```
+
+日常只需要领取那条命令。有新活动时跑一次即可，已领过的账号自动跳过，重复跑没有副作用。
 
 凭据来源两种方式：
 

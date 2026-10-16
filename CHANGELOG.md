@@ -18,6 +18,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Claim history appended to `claim-history.jsonl` under the system user data directory.
 - Credentials format sample with randomized values under `examples/`.
 - MIT license, contribution guide, security policy, FAQ, issue and pull request templates.
+- `README.md` in English with `README.zh-CN.md` as the Chinese companion, cross-linked at the top of both.
+- Packaging metadata in `pyproject.toml`, exposing a `codebuddy-claim` console command.
+- Pre-commit configuration covering text hygiene, syntax checks and private key detection.
 
 ### Fixed
 

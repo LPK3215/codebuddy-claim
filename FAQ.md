@@ -24,6 +24,10 @@ The server revoked that account's token. The JWT expiry stored locally is only a
 
 No. Before claiming, the script asks the server whether the reward was already taken. Already claimed accounts are skipped, so repeated runs are safe.
 
+## Can I install it instead of calling the script?
+
+Yes. `pip install .` installs the package and puts a `codebuddy-claim` command on the PATH, so `codebuddy-claim claim --data <path>` works from any directory. Running `codebuddy_claim.py` directly from the project root behaves identically.
+
 ## Does the script work behind a proxy?
 
 No, and that is deliberate. It builds its opener with an empty proxy handler to force a direct connection. If you swap in another HTTP client, disable proxies explicitly.

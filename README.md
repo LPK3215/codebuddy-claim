@@ -32,18 +32,29 @@ If you happen to use Cockpit Tools, its account export already matches this form
 
 ## 2. Usage
 
-Every command runs from the project root. On Windows use `.\.venv\Scripts\python.exe`, on macOS and Linux use `.venv/bin/python`:
+Run everything from the project root. Create a virtual environment and install the dependencies:
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
+```
 
+On Windows call the interpreter as `.\.venv\Scripts\python.exe`, on macOS and Linux as `.venv/bin/python`. Then:
+
+```powershell
 .\.venv\Scripts\python.exe codebuddy_claim.py list             # list accounts and token validity
 .\.venv\Scripts\python.exe codebuddy_claim.py claim --dry-run  # report what is claimable, claim nothing
 .\.venv\Scripts\python.exe codebuddy_claim.py claim            # claim for real
 ```
 
-Day to day only the last command matters. Run it once whenever a new campaign shows up. Accounts already claimed are skipped automatically, so running it twice has no side effect.
+The package can also be installed, which puts a `codebuddy-claim` command on the PATH:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install .
+codebuddy-claim list --data examples\sample-accounts.json
+```
+
+Day to day only the claim command matters. Run it once whenever a new campaign shows up. Accounts already claimed are skipped automatically, so running it twice has no side effect.
 
 Two credential sources:
 

@@ -26,6 +26,16 @@ Never paste `access_token` or `refresh_token` values. Redact them before posting
 python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 .\.venv\Scripts\python.exe codebuddy_claim.py --data examples/sample-accounts.json list
+
 .\.venv\Scripts\python.exe -m pip install pre-commit
 .\.venv\Scripts\python.exe -m pre_commit run --all-files
 ```
+
+Packaging metadata lives in `pyproject.toml`. Verify it still builds and installs before touching it:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install .
+codebuddy-claim --data examples\sample-accounts.json list
+```
+
+Remove the `build/` directory and the `*.egg-info/` directory that the install leaves behind, both are git-ignored and easy to forget.
